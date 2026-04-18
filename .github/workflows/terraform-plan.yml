@@ -1,0 +1,86 @@
+name: Terraform Plan
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  id-token: write       # OIDC
+  contents: read
+  pull-requests: write  # post plan as PR comment
+
+jobs:
+  plan:
+    name: Plan (${{ matrix.environment }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [dev, staging, prod]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~1.8"
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+        working-directory: environments/${{ matrix.environment }}
+
+      - name: Terraform Init
+        working-directory: environments/${{ matrix.environment }}
+        run: |
+          terraform init \
+            -backend-config="storage_account_name=${{ vars.TFSTATE_STORAGE_ACCOUNT }}"
+        env:
+          ARM_USE_OIDC:        "true"
+          ARM_CLIENT_ID:       ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID:       ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Terraform Validate
+        working-directory: environments/${{ matrix.environment }}
+        run: terraform validate
+
+      - name: Terraform Plan
+        id: plan
+        working-directory: environments/${{ matrix.environment }}
+        run: |
+          terraform plan -no-color -out=tfplan \
+            -var="tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
+            -var="deployer_object_id=${{ secrets.AZURE_CLIENT_OBJECT_ID }}" \
+            -var="db_admin_password=${{ secrets.DB_ADMIN_PASSWORD }}" \
+            -var="vm_admin_password=${{ secrets.VM_ADMIN_PASSWORD }}" \
+            -var="artifact_storage_account=${{ vars.ARTIFACT_STORAGE_ACCOUNT }}" \
+            -var="artifact_storage_connection_string=${{ secrets.ARTIFACT_STORAGE_CONNECTION_STRING }}" \
+            2>&1 | tee plan-output.txt
+        env:
+          ARM_USE_OIDC:        "true"
+          ARM_CLIENT_ID:       ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID:       ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Post Plan as PR Comment
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          script: |
+            const fs = require('fs');
+            const plan = fs.readFileSync('environments/${{ matrix.environment }}/plan-output.txt', 'utf8');
+            const truncated = plan.length > 60000 ? plan.slice(0, 60000) + '\n\n[...truncated]' : plan;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `### Terraform Plan — \`${{ matrix.environment }}\`\n\`\`\`hcl\n${truncated}\n\`\`\``
+            });

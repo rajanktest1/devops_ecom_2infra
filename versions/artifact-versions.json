@@ -1,0 +1,8 @@
+{
+  "sha": "0000000000000000000000000000000000000000",
+  "backend_artifact": "backend-0000000000000000000000000000000000000000.zip",
+  "frontend_artifact": "frontend-0000000000000000000000000000000000000000.zip",
+  "storage_account": "",
+  "updated_at": "1970-01-01T00:00:00Z",
+  "triggered_by": "initial"
+}
