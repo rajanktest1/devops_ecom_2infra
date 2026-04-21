@@ -55,5 +55,3 @@ variable "unique_suffix" {
   description = "Short unique suffix for globally-scoped names such as Key Vault"
   type        = string
 }
-  sensitive   = true
-}
