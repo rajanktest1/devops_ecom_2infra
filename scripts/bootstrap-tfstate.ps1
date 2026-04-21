@@ -30,32 +30,17 @@ Write-Host "==> Using subscription: $currentSub"
 
 # Create resource group
 Write-Host "==> Creating resource group: $ResourceGroup in $Location..."
-az group create `
-    --name $ResourceGroup `
-    --location $Location `
-    --output none
+az group create --name $ResourceGroup --location $Location --output none
 
 # Create storage account (LRS, no public blob access)
 Write-Host "==> Creating storage account: $StorageAccount..."
-az storage account create `
-    --name $StorageAccount `
-    --resource-group $ResourceGroup `
-    --location $Location `
-    --sku Standard_LRS `
-    --kind StorageV2 `
-    --allow-blob-public-access false `
-    --min-tls-version TLS1_2 `
-    --output none
+az storage account create --name $StorageAccount --resource-group $ResourceGroup --location $Location --sku Standard_LRS --kind StorageV2 --allow-blob-public-access false --min-tls-version TLS1_2 --output none
 
 # Create containers (one per environment + one for shared)
 $containers = @('tfstate-shared', 'tfstate-dev', 'tfstate-staging', 'tfstate-prod')
 foreach ($container in $containers) {
     Write-Host "==> Creating container: $container..."
-    az storage container create `
-        --name $container `
-        --account-name $StorageAccount `
-        --auth-mode login `
-        --output none
+    az storage container create --name $container --account-name $StorageAccount --auth-mode login --output none
 }
 
 Write-Host ""
@@ -72,6 +57,6 @@ Write-Host "  2. In both GitHub repos, set the following GitHub Variable:"
 Write-Host "       TFSTATE_STORAGE_ACCOUNT = $StorageAccount"
 Write-Host "  3. Update environments/*/backend.tf with:"
 Write-Host "       storage_account_name = `"$StorageAccount`""
-Write-Host "  4. Run: cd shared/artifacts-storage && terraform init && terraform apply"
+Write-Host "  4. Run: cd shared/artifacts-storage; terraform init; terraform apply"
 Write-Host "  5. Push your infra repo — Terraform Apply workflow will provision everything."
 Write-Host ""

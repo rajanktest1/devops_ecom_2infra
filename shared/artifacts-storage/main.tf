@@ -6,18 +6,11 @@ terraform {
     }
   }
   required_version = ">= 1.8"
-
-  backend "azurerm" {
-    resource_group_name  = "rg-ecomm-shared"
-    # storage_account_name — set via -backend-config or TF_VAR after bootstrap
-    container_name       = "tfstate-shared"
-    key                  = "artifacts-storage.tfstate"
-  }
 }
 
 provider "azurerm" {
   features {}
-  use_oidc = true
+  # use_oidc = true   # enabled in CI via GitHub Actions; local runs use az login
 }
 
 resource "azurerm_resource_group" "shared" {
