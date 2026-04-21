@@ -40,6 +40,12 @@ variable "app_service_sku" {
   default = "B1"
 }
 
+variable "enable_appservice" {
+  description = "Set false to skip App Service creation (e.g. when subscription quota blocks it)"
+  type        = bool
+  default     = true
+}
+
 variable "artifact_storage_account" {
   description = "Artifact storage account name (from shared/artifacts-storage output)"
   type        = string

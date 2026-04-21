@@ -72,6 +72,7 @@ module "database" {
   environment         = local.environment
   location            = local.location
   db_location         = var.db_location
+  suffix              = var.unique_suffix
   resource_group_name = azurerm_resource_group.env.name
   db_admin_password   = var.db_admin_password
   sku_name            = var.db_sku
@@ -92,6 +93,7 @@ module "vm" {
 }
 
 module "appservice" {
+  count               = var.enable_appservice ? 1 : 0
   source              = "../../modules/appservice"
   project             = local.project
   environment         = local.environment

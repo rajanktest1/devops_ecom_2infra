@@ -4,7 +4,7 @@ locals {
 }
 
 resource "azurerm_mysql_flexible_server" "db" {
-  name                   = "mysql-${var.project}-${var.environment}"
+  name                   = "mysql-${var.project}-${var.environment}-${var.suffix}"
   location               = local.db_location
   resource_group_name    = var.resource_group_name
   administrator_login    = var.db_admin_username

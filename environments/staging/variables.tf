@@ -6,6 +6,7 @@ variable "vm_admin_password" { type = string; sensitive = true }
 variable "db_sku" { type = string; default = "B_Standard_B2s" }
 variable "vm_size" { type = string; default = "Standard_D2s_v3" }
 variable "app_service_sku" { type = string; default = "B1" }
+variable "enable_appservice" { type = bool; default = true }
 variable "artifact_storage_account" { type = string }
 variable "db_location" { type = string; default = null }
 variable "unique_suffix" { type = string }

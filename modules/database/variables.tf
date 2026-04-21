@@ -2,6 +2,11 @@ variable "project" { type = string }
 variable "environment" { type = string }
 variable "location" { type = string }
 
+variable "suffix" {
+  description = "Short unique suffix appended to globally-scoped resource names"
+  type        = string
+}
+
 variable "db_location" {
   description = "Override region for MySQL Flexible Server (null = use var.location)"
   type        = string
