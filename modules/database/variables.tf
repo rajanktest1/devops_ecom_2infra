@@ -1,17 +1,14 @@
 variable "project" { type = string }
 variable "environment" { type = string }
 variable "location" { type = string }
+
+variable "db_location" {
+  description = "Override region for MySQL Flexible Server (null = use var.location)"
+  type        = string
+  default     = null
+}
+
 variable "resource_group_name" { type = string }
-
-variable "vnet_id" {
-  description = "VNet ID for private DNS zone link"
-  type        = string
-}
-
-variable "db_subnet_id" {
-  description = "Delegated subnet ID for MySQL Flexible Server"
-  type        = string
-}
 
 variable "db_admin_username" {
   description = "MySQL administrator username"

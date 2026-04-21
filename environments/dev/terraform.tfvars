@@ -2,4 +2,6 @@
 location        = "eastus"
 db_sku          = "B_Standard_B1ms"
 vm_size         = "Standard_B2s"
-app_service_sku = "F1"
+app_service_sku = "B1"
+db_location     = "eastus2"   # MySQL Flexible Server region (eastus has capacity limits on free subscriptions)
+unique_suffix   = "2abc"      # Short unique suffix for globally-scoped names (Key Vault)

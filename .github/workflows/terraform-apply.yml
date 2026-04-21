@@ -75,8 +75,7 @@ jobs:
             -var="deployer_object_id=${{ secrets.AZURE_CLIENT_OBJECT_ID }}" \
             -var="db_admin_password=${{ secrets.DB_ADMIN_PASSWORD }}" \
             -var="vm_admin_password=${{ secrets.VM_ADMIN_PASSWORD }}" \
-            -var="artifact_storage_account=${{ vars.ARTIFACT_STORAGE_ACCOUNT }}" \
-            -var="artifact_storage_connection_string=${{ secrets.ARTIFACT_STORAGE_CONNECTION_STRING }}"
+            -var="artifact_storage_account=${{ vars.ARTIFACT_STORAGE_ACCOUNT }}"
         env:
           ARM_USE_OIDC:        "true"
           ARM_CLIENT_ID:       ${{ secrets.AZURE_CLIENT_ID }}
@@ -116,8 +115,7 @@ jobs:
             -var="deployer_object_id=${{ secrets.AZURE_CLIENT_OBJECT_ID }}" \
             -var="db_admin_password=${{ secrets.DB_ADMIN_PASSWORD }}" \
             -var="vm_admin_password=${{ secrets.VM_ADMIN_PASSWORD }}" \
-            -var="artifact_storage_account=${{ vars.ARTIFACT_STORAGE_ACCOUNT }}" \
-            -var="artifact_storage_connection_string=${{ secrets.ARTIFACT_STORAGE_CONNECTION_STRING }}"
+            -var="artifact_storage_account=${{ vars.ARTIFACT_STORAGE_ACCOUNT }}"
         env:
           ARM_USE_OIDC:        "true"
           ARM_CLIENT_ID:       ${{ secrets.AZURE_CLIENT_ID }}
@@ -157,8 +155,7 @@ jobs:
             -var="deployer_object_id=${{ secrets.AZURE_CLIENT_OBJECT_ID }}" \
             -var="db_admin_password=${{ secrets.DB_ADMIN_PASSWORD }}" \
             -var="vm_admin_password=${{ secrets.VM_ADMIN_PASSWORD }}" \
-            -var="artifact_storage_account=${{ vars.ARTIFACT_STORAGE_ACCOUNT }}" \
-            -var="artifact_storage_connection_string=${{ secrets.ARTIFACT_STORAGE_CONNECTION_STRING }}"
+            -var="artifact_storage_account=${{ vars.ARTIFACT_STORAGE_ACCOUNT }}"
         env:
           ARM_USE_OIDC:        "true"
           ARM_CLIENT_ID:       ${{ secrets.AZURE_CLIENT_ID }}

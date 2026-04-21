@@ -42,16 +42,16 @@ variable "bootstrap_storage_account" {
   type        = string
 }
 
+variable "artifacts_resource_group" {
+  description = "Resource group containing the artifacts storage account"
+  type        = string
+  default     = "rg-ecomm-shared"
+}
+
 variable "bootstrap_storage_container" {
   description = "Container in the bootstrap storage account"
   type        = string
   default     = "artifacts"
-}
-
-variable "bootstrap_storage_connection_string" {
-  description = "Connection string for SAS token generation for bootstrap blob"
-  type        = string
-  sensitive   = true
 }
 
 variable "tags" {

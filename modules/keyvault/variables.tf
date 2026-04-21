@@ -25,6 +25,11 @@ variable "vm_admin_password" {
   sensitive   = true
 }
 
+variable "suffix" {
+  description = "Short unique suffix for globally-scoped Key Vault name (e.g. last 4 chars of subscription ID)"
+  type        = string
+}
+
 variable "tags" {
   type    = map(string)
   default = {}

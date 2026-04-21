@@ -52,6 +52,12 @@ resource "azurerm_windows_virtual_machine" "vm" {
   tags = var.tags
 }
 
+# Look up the artifacts storage account to generate a SAS token without needing to pass the connection string
+data "azurerm_storage_account" "bootstrap" {
+  name                = var.bootstrap_storage_account
+  resource_group_name = var.artifacts_resource_group
+}
+
 # Upload bootstrap.ps1 to a storage blob and run it via Custom Script Extension
 resource "azurerm_storage_blob" "bootstrap" {
   name                   = "bootstrap-${var.environment}.ps1"
@@ -62,7 +68,7 @@ resource "azurerm_storage_blob" "bootstrap" {
 }
 
 data "azurerm_storage_account_sas" "bootstrap" {
-  connection_string = var.bootstrap_storage_connection_string
+  connection_string = data.azurerm_storage_account.bootstrap.primary_connection_string
   https_only        = true
   signed_version    = "2020-12-06"
 

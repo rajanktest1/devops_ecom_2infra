@@ -37,7 +37,7 @@ variable "vm_size" {
 
 variable "app_service_sku" {
   type    = string
-  default = "F1"
+  default = "B1"
 }
 
 variable "artifact_storage_account" {
@@ -45,8 +45,15 @@ variable "artifact_storage_account" {
   type        = string
 }
 
-variable "artifact_storage_connection_string" {
-  description = "Connection string for artifact storage (used for SAS generation in vm module)"
+variable "db_location" {
+  description = "Override region for MySQL (null = use var.location); change if eastus has no capacity"
   type        = string
+  default     = null
+}
+
+variable "unique_suffix" {
+  description = "Short unique suffix for globally-scoped names such as Key Vault"
+  type        = string
+}
   sensitive   = true
 }

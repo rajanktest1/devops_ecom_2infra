@@ -7,4 +7,5 @@ variable "db_sku" { type = string; default = "B_Standard_B2s" }
 variable "vm_size" { type = string; default = "Standard_D2s_v3" }
 variable "app_service_sku" { type = string; default = "B1" }
 variable "artifact_storage_account" { type = string }
-variable "artifact_storage_connection_string" { type = string; sensitive = true }
+variable "db_location" { type = string; default = null }
+variable "unique_suffix" { type = string }
